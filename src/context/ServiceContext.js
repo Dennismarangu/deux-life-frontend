@@ -2,8 +2,8 @@ import React, { createContext, useState, useEffect } from 'react';
 
 export const ServiceContext = createContext();
 
-const ServiceContext = (props) => {
-    const [services, setServices] = useState([]);
+const ServiceContextProvider = (props) => {
+  const [services, setServices] = useState([]);
 
   useEffect(() => {
     fetchServices();
@@ -21,8 +21,6 @@ const ServiceContext = (props) => {
       {props.children}
     </ServiceContext.Provider>
   );
-
 };
 
-
-export default ServiceContext;
+export default ServiceContextProvider;
