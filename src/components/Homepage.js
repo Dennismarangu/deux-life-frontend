@@ -22,8 +22,8 @@ export function Homepage () {
             <Image 
               src={require('../images/logo.png')}
               alt='Hotel Logo'
-              height="1200px"
-              width="720px"
+              height="1920px"
+              width="1080px"
             />
             <nav>
               <NavBar onChangePage={setPage} />
