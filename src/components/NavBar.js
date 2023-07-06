@@ -28,7 +28,7 @@ export function NavBar() {
       </NavLink>
 
       <NavLink
-        to="/request"
+        to="/service"
         className="link"
       >
         <Flex align="center">
