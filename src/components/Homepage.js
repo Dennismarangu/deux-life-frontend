@@ -1,15 +1,13 @@
+import { useState } from 'react';
 import { Box } from '@chakra-ui/react';
-import * as React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import { Homepage } from './components/Homepage';
+import { NavBar } from './NavBar';
 
-function App() {
-  return (
-    <>
-      <Routes>
-        <Route path="/" element={
-          <Box
-            bgImage={require('./images/background.jpg')}
+export function Homepage () {
+    const [page, setPage] = useState("/");
+
+    return (
+        <Box
+            bgImage={require('../images/background.jpg')}
             bgSize="cover"
             bgPosition="center"
             display="flex"
@@ -26,10 +24,5 @@ function App() {
             </nav>
           </Box>
         </Box>
-        }/>
-      </Routes>
-    </>
-  );
+    )
 }
-
-export default App;
