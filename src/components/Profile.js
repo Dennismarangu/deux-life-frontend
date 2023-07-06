@@ -5,5 +5,5 @@ import { Button, Input } from "@chakra-ui/react";
 
 const profile = () => {
     const [customerProfile, setCustomerProfile] = useState({});
-  const [authentication, setAuthentication] = useState(true);
+   const [authentication, setAuthentication] = useState(true); 
 }
