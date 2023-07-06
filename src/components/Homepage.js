@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Box, Image, Text } from '@chakra-ui/react';
 import { NavBar } from './NavBar';
 
 export function Homepage () {
@@ -19,6 +19,12 @@ export function Homepage () {
             // }}
         >
           <Box width="300px" height="200px" display="flex" flexDirection="column" justifyContent="center" textAlign="center">
+            <Image 
+              src={require('../images/logo.png')}
+              alt='Hotel Logo'
+              height="1200px"
+              width="720px"
+            />
             <nav>
               <NavBar onChangePage={setPage} />
             </nav>
