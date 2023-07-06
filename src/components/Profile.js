@@ -36,4 +36,10 @@ const validationSchema = Yup.object({
       .required("Password confirmation is required"),
   });
 
+const handleUpdateAccount = (values) => {
+  // Simulated API call to update the customer's account
+  console.log("Update account:", values);
+};
+
+
 
