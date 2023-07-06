@@ -85,6 +85,28 @@ const handleDeleteAccount = async () => {
   }
 };
 
+const handleLogout = async () => {
+  try {
+    const response = await fetch("/api/logout", {
+      method: "DELETE", // Use the appropriate HTTP method for logging out the customer
+    });
+
+    if (response.ok) {
+      console.log("Logout successful");
+      setAuthentication(false); // Update the authentication state to false
+      // Optionally, you can perform additional actions after logging out
+    } else {
+      const errorData = await response.json();
+      console.error("Failed to logout:", errorData);
+      // Display an error message or handle the error accordingly
+    }
+  } catch (error) {
+    console.error("An error occurred while logging out:", error);
+    // Handle the error condition
+  }
+};
+
+
 
 
 
