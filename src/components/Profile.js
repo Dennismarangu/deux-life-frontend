@@ -63,6 +63,29 @@ const handleUpdateAccount = async (values) => {
   }
 };
 
+const handleDeleteAccount = async () => {
+  const customerId = "123"; // Replace "123" with the actual customer ID
+
+  try {
+    const response = await fetch(`/api/customers/${customerId}`, {
+      method: "DELETE", // Use the appropriate HTTP method for deleting the customer's account
+    });
+
+    if (response.ok) {
+      console.log("Account deleted successfully");
+      // Optionally, you can perform additional actions after deleting the account
+    } else {
+      const errorData = await response.json();
+      console.error("Failed to delete account:", errorData);
+      // Display an error message or handle the error accordingly
+    }
+  } catch (error) {
+    console.error("An error occurred while deleting account:", error);
+    // Handle the error condition
+  }
+};
+
+
 
 
 
