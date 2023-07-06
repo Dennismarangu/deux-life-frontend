@@ -36,10 +36,35 @@ const validationSchema = Yup.object({
       .required("Password confirmation is required"),
   });
 
-const handleUpdateAccount = (values) => {
-  // Simulated API call to update the customer's account
-  console.log("Update account:", values);
+const handleUpdateAccount = async (values) => {
+   const customerId = "123"; // Replace "123" with the actual customer ID
+
+
+  try {
+    const response = await fetch(`/api/customers/:customerId`, {
+      method: "PATCH", // Use the appropriate HTTP method for updating the customer's account
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (response.ok) {
+      console.log("Account updated successfully");
+      // Optionally, you can fetch the updated customer profile here or display a success message
+    } else {
+      const errorData = await response.json();
+      console.error("Failed to update account:", errorData);
+      // Display an error message or handle the error accordingly
+    }
+  } catch (error) {
+    console.error("An error occurred while updating account:", error);
+    // Handle the error condition
+  }
 };
+
+
+
 
 
 
