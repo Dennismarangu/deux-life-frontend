@@ -14,6 +14,7 @@ const Profile = () => {
         if (response.ok) {
           const profileData = await response.json();
           setCustomerProfile(profileData);
+          setAuthentication(true); // Update the authentication state to true
         } else {
           const errorData = await response.json();
           console.error("Failed to fetch customer profile:", errorData);
@@ -25,7 +26,7 @@ const Profile = () => {
 
     fetchCustomerProfile();
   }, []);
-
+  
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -39,7 +40,7 @@ const Profile = () => {
     const customerId = "123"; // Replace "123" with the actual customer ID
 
     try {
-      const response = await fetch(`http://127.0.0.1:3000/api/customers/${customerId}`, {
+      const response = await fetch(`http://127.0.0.1:3000/customers/${customerId}`, {
         method: "PATCH", // Use the appropriate HTTP method for updating the customer's account
         headers: {
           "Content-Type": "application/json",
@@ -65,7 +66,7 @@ const Profile = () => {
     const customerId = "123"; // Replace "123" with the actual customer ID
 
     try {
-      const response = await fetch(`http://127.0.0.1:3000/api/customers/${customerId}`, {
+      const response = await fetch(`http://127.0.0.1:3000/customers/${customerId}`, {
         method: "DELETE", // Use the appropriate HTTP method for deleting the customer's account
       });
 
@@ -85,7 +86,7 @@ const Profile = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:3000/api/logout", {
+      const response = await fetch("http://127.0.0.1:3000/logout", {
         method: "DELETE", // Use the appropriate HTTP method for logging out the customer
       });
 
