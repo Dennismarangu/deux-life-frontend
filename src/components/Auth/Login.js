@@ -1,10 +1,18 @@
 import React, { useState, useContext } from 'react';
-import { Alert, Avatar, Box, Container, Grid, Link as MuiLink, TextField, Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {
+  Box,
+  Container,
+  Grid,
+  Link as ChakraLink,
+  Avatar,
+  Typography,
+} from '@chakra-ui/react';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { LoadingButton } from '@mui/lab';
+import { Link } from 'react-router-dom';
+import { LoadingButton } from '@chakra-ui/react';
 import { AuthContext } from '../context';
+import { FormControl, FormLabel, Input, FormErrorMessage } from 'formik';
 
 const loginSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -42,16 +50,14 @@ export const Login = () => {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container maxW="xs">
       <Box
-        sx={{
-          marginTop: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}
+        mt={8}
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+        <Avatar bg="secondary.main" m={1}>
           {/* <LockOutlinedIcon /> */}
         </Avatar>
         <Typography component="h1" variant="h5">
@@ -67,61 +73,66 @@ export const Login = () => {
           onSubmit={handleSubmit}
         >
           <Form noValidate>
-            <Field
-              as={TextField}
-              margin="normal"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              name="username"
-              error={
-                formik.touched.username &&
-                Boolean(formik.errors.username)
-              }
-              helperText={
-                formik.touched.username &&
-                formik.errors.username
-              }
-            />
-            <Field
-              as={TextField}
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              error={
-                formik.touched.password &&
-                Boolean(formik.errors.password)
-              }
-              helperText={
-                formik.touched.password &&
-                formik.errors.password
-              }
-            />
+            <Field name="username">
+              {({ field, form }) => (
+                <FormControl
+                  isInvalid={
+                    form.touched.username && form.errors.username
+                  }
+                >
+                  <FormLabel htmlFor="username">Username</FormLabel>
+                  <Input
+                    {...field}
+                    id="username"
+                    placeholder="Username"
+                  />
+                  <FormErrorMessage>
+                    {form.errors.username}
+                  </FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+
+            <Field name="password">
+              {({ field, form }) => (
+                <FormControl
+                  isInvalid={
+                    form.touched.password && form.errors.password
+                  }
+                >
+                  <FormLabel htmlFor="password">Password</FormLabel>
+                  <Input
+                    {...field}
+                    id="password"
+                    type="password"
+                    placeholder="Password"
+                  />
+                  <FormErrorMessage>
+                    {form.errors.password}
+                  </FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
 
             <LoadingButton
               type="submit"
               fullWidth
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-              loading={formik.isSubmitting}
+              mt={3}
+              mb={2}
+              isLoading={formik.isSubmitting}
             >
               Login
             </LoadingButton>
             <Grid container>
               <Grid item>
-                <MuiLink
+                <ChakraLink
+                  as={Link}
                   to="/signup"
                   variant="body2"
-                  component={Link}
                 >
-                  {"Don't have an account? Sign Up"}
-                </MuiLink>
+                  Don't have an account? Sign Up
+                </ChakraLink>
               </Grid>
             </Grid>
           </Form>
