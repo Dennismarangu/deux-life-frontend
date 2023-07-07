@@ -1,147 +1,107 @@
-import { useContext } from 'react';
-import {
-  Avatar,
-  Box,
-  Container,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Grid,
-  Input,
-  Text,
-  Button,
-} from '@chakra-ui/react';
-import { Formik, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { AuthContext } from '../context';
+import React, { useEffect, useState } from "react";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
+import { Button, FormControl, FormLabel, Input, FormErrorMessage } from "@chakra-ui/react";
 
-const profileSchema = Yup.object().shape({
-  first_name: Yup.string().required('First name is required'),
-  last_name: Yup.string().required('Last name is required'),
-  username: Yup.string().required('Username is required'),
-  phone: Yup.string()
-    .min(10, 'Phone number should have 10 digits')
-    .max(10, 'Phone number cannot have more than 10 digits')
-    .optional(),
-  email: Yup.string()
-    .email('Enter a valid email address')
-    .required('Email address is required'),
-});
+const Profile = () => {
+  const [customerProfile, setCustomerProfile] = useState({});
+  const [authentication, setAuthentication] = useState(true);
 
-export const Profile = () => {
-  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    const fetchCustomerProfile = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:3000/api/customers/:customerId"); // Replace ":customerId" with the actual ID of the logged-in customer
+        if (response.ok) {
+          const profileData = await response.json();
+          setCustomerProfile(profileData);
+          setAuthentication(true); // Update the authentication state to true
+        } else {
+          const errorData = await response.json();
+          console.error("Failed to fetch customer profile:", errorData);
+        }
+      } catch (error) {
+        console.error("An error occurred while fetching customer profile:", error);
+      }
+    };
 
-  const handleSubmit = async (values) => {
-    console.log(values);
+    fetchCustomerProfile();
+  }, []);
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email address").required("Email is required"),
+    password: Yup.string().required("Password is required").min(6, "Password must be at least 6 characters"),
+    password_confirmation: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Passwords must match")
+      .required("Password confirmation is required"),
+  });
+
+  const handleUpdateAccount = async (values) => {
+    try {
+      const customerId = customerProfile?.id; // Extract the customerId from the customerProfile object
+      const response = await fetch(`http://127.0.0.1:3000/customers/${customerId}`, {
+        method: "PATCH", // Use the appropriate HTTP method for updating the customer's account
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        console.log("Account updated successfully");
+        // Optionally, you can fetch the updated customer profile here or display a success message
+      } else {
+        const errorData = await response.json();
+        console.error("Failed to update account:", errorData);
+        // Display an error message or handle the error accordingly
+      }
+    } catch (error) {
+      console.error("An error occurred while updating account:", error);
+      // Handle the error condition
+    }
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box
-        marginTop={8}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-      >
-        <Avatar bg="secondary.main" m={1}>
-          {/* <LockOutlinedIcon /> */}
-        </Avatar>
-        <Text fontSize="2xl">Profile</Text>
+    <Formik
+      initialValues={{
+        name: customerProfile?.name || "",
+        email: customerProfile?.email || "",
+        password: "",
+        password_confirmation: "",
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleUpdateAccount}
+    >
+      <Form>
+        {/* Form fields */}
         <Formik
-          initialValues={{
-            first_name: user?.first_name || '',
-            last_name: user?.last_name || '',
-            username: user?.username || '',
-            phone: user?.phone || '',
-            email: user?.email || '',
-          }}
-          validationSchema={profileSchema}
-          onSubmit={handleSubmit}
-        >
-          <Form>
-            <Grid gap={3}>
-              <Field name="first_name">
-                {({ field, form }) => (
-                  <FormControl
-                    isInvalid={form.errors.first_name && form.touched.first_name}
-                  >
-                    <FormLabel htmlFor="first_name">First Name</FormLabel>
-                    <Input {...field} id="first_name" placeholder="First Name" />
-                    <ErrorMessage
-                      name="first_name"
-                      component={FormErrorMessage}
-                    />
-                  </FormControl>
-                )}
-              </Field>
+  initialValues={{
+    name: customerProfile?.name || "",
+    email: customerProfile?.email || "",
+    password: "",
+    password_confirmation: "",
+  }}
+  validationSchema={validationSchema}
+  onSubmit={handleUpdateAccount}
+>
+  <Form>
+    <Field name="name">
+      {({ field, form }) => (
+        <FormControl isInvalid={form.errors.name && form.touched.name}>
+          <FormLabel htmlFor="name">Name</FormLabel>
+          <Input {...field} id="name" placeholder="Name" />
+          <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+        </FormControl>
+      )}
+    </Field>
+    {/* Add other fields using the same pattern */}
+    <Button type="submit">Update Account</Button>
+  </Form>
+</Formik>
 
-              <Field name="last_name">
-                {({ field, form }) => (
-                  <FormControl
-                    isInvalid={form.errors.last_name && form.touched.last_name}
-                  >
-                    <FormLabel htmlFor="last_name">Last Name</FormLabel>
-                    <Input {...field} id="last_name" placeholder="Last Name" />
-                    <ErrorMessage
-                      name="last_name"
-                      component={FormErrorMessage}
-                    />
-                  </FormControl>
-                )}
-              </Field>
-
-              <Field name="username">
-                {({ field, form }) => (
-                  <FormControl
-                    isInvalid={form.errors.username && form.touched.username}
-                  >
-                    <FormLabel htmlFor="username">Username</FormLabel>
-                    <Input {...field} id="username" placeholder="Username" />
-                    <ErrorMessage
-                      name="username"
-                      component={FormErrorMessage}
-                    />
-                  </FormControl>
-                )}
-              </Field>
-
-              <Field name="phone">
-                {({ field, form }) => (
-                  <FormControl
-                    isInvalid={form.errors.phone && form.touched.phone}
-                  >
-                    <FormLabel htmlFor="phone">Phone Number</FormLabel>
-                    <Input {...field} id="phone" placeholder="Phone Number" />
-                    <ErrorMessage
-                      name="phone"
-                      component={FormErrorMessage}
-                    />
-                  </FormControl>
-                )}
-              </Field>
-
-              <Field name="email">
-                {({ field, form }) => (
-                  <FormControl
-                    isInvalid={form.errors.email && form.touched.email}
-                  >
-                    <FormLabel htmlFor="email">Email Address</FormLabel>
-                    <Input {...field} id="email" placeholder="Email Address" />
-                    <ErrorMessage
-                      name="email"
-                      component={FormErrorMessage}
-                    />
-                  </FormControl>
-                )}
-              </Field>
-
-              <Button type="submit" colorScheme="blue">
-                Update Account
-              </Button>
-            </Grid>
-          </Form>
-        </Formik>
-      </Box>
-    </Container>
+      </Form>
+    </Formik>
   );
 };
+
+export default Profile;

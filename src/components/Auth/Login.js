@@ -1,11 +1,15 @@
 import React, { useState, useContext } from 'react';
-import { Box, Container, Grid, Link as ChakraLink, Avatar, Typography, LoadingButton} from '@chakra-ui/react';
-import { Formik, Form, Field, FormControl, FormLabel, Input, FormErrorMessage } from 'formik';
+import { Box, Container, Grid, Link as ChakraLink, Avatar, Text, Alert, Button } from '@chakra-ui/react';
+import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { Link } from 'react-router-dom';
-import { LoadingButton } from '@chakra-ui/react';
-import { AuthContext } from '../context';
-import { FormControl, FormLabel, Input, FormErrorMessage } from 'formik';
+import AuthContext from '../context/AuthContext';
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  FormErrorMessage,
+} from '@chakra-ui/react';
 
 const loginSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -17,7 +21,7 @@ export const Login = () => {
 
   const { login } = useContext(AuthContext);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await fetch('/sessions', {
         method: 'POST',
@@ -29,7 +33,7 @@ export const Login = () => {
 
       const data = await response.json();
 
-      if (data instanceof Array) {
+      if (Array.isArray(data)) {
         setError(data[0]);
       } else if (data.status === 'error') {
         setError(data.message);
@@ -39,24 +43,21 @@ export const Login = () => {
       }
     } catch (error) {
       setError('Internal server error');
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
     <Container maxW="xs">
-      <Box
-        mt={8}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-      >
+      <Box mt={8} display="flex" flexDirection="column" alignItems="center">
         <Avatar bg="secondary.main" m={1}>
           {/* <LockOutlinedIcon /> */}
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Text component="h1" variant="h5">
           Login
-        </Typography>
-        {error && <Alert severity="error">{error}</Alert>}
+        </Text>
+        {error && <Alert status="error">{error}</Alert>}
         <Formik
           initialValues={{
             username: '',
@@ -65,70 +66,56 @@ export const Login = () => {
           validationSchema={loginSchema}
           onSubmit={handleSubmit}
         >
-          <Form noValidate>
-            <Field name="username">
-              {({ field, form }) => (
-                <FormControl
-                  isInvalid={
-                    form.touched.username && form.errors.username
-                  }
-                >
-                  <FormLabel htmlFor="username">Username</FormLabel>
-                  <Input
-                    {...field}
-                    id="username"
-                    placeholder="Username"
-                  />
-                  <FormErrorMessage>
-                    {form.errors.username}
-                  </FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
+          {(props) => (
+            <Form noValidate>
+              <Field name="username">
+                {({ field, form }) => (
+                  <FormControl
+                    isInvalid={form.errors.username && form.touched.username}
+                  >
+                    <FormLabel htmlFor="username">Username</FormLabel>
+                    <Input {...field} id="username" placeholder="Username" />
+                    <FormErrorMessage>{form.errors.username}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
 
-            <Field name="password">
-              {({ field, form }) => (
-                <FormControl
-                  isInvalid={
-                    form.touched.password && form.errors.password
-                  }
-                >
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <Input
-                    {...field}
-                    id="password"
-                    type="password"
-                    placeholder="Password"
-                  />
-                  <FormErrorMessage>
-                    {form.errors.password}
-                  </FormErrorMessage>
-                </FormControl>
-              )}
-            </Field>
+              <Field name="password">
+                {({ field, form }) => (
+                  <FormControl
+                    isInvalid={form.errors.password && form.touched.password}
+                  >
+                    <FormLabel htmlFor="password">Password</FormLabel>
+                    <Input
+                      {...field}
+                      id="password"
+                      type="password"
+                      placeholder="Password"
+                    />
+                    <FormErrorMessage>{form.errors.password}</FormErrorMessage>
+                  </FormControl>
+                )}
+              </Field>
 
-            <LoadingButton
-              type="submit"
-              fullWidth
-              variant="contained"
-              mt={3}
-              mb={2}
-              isLoading={formik.isSubmitting}
-            >
-              Login
-            </LoadingButton>
-            <Grid container>
-              <Grid item>
-                <ChakraLink
-                  as={Link}
-                  to="/signup"
-                  variant="body2"
-                >
-                  Don't have an account? Sign Up
-                </ChakraLink>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                mt={3}
+                mb={2}
+                isLoading={props.isSubmitting}
+              >
+                Login
+              </Button>
+              <Grid container>
+                <Grid item>
+                  <ChakraLink as={Link} to="/signup" variant="body2">
+                    Don't have an account? Sign Up
+                  </ChakraLink>
+                </Grid>
               </Grid>
-            </Grid>
-          </Form>
+            </Form>
+          )}
         </Formik>
       </Box>
     </Container>
