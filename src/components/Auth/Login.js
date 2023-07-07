@@ -1,72 +1,132 @@
-import React, { useContext } from "react";
-import { Formik, Form, Field } from "formik";
-import { Button, Input, FormControl, FormLabel } from "@chakra-ui/react";
-import { loginValidator } from "../../utils/validators/auth.validators";
-import { DynamicContext } from "../../utils/context/AuthContext"; // Update the import statement
-import axios from "axios";
+import React, { useState, useContext } from 'react';
+import { Alert, Avatar, Box, Container, Grid, Link as MuiLink, TextField, Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+import { LoadingButton } from '@mui/lab';
+import { AuthContext } from '../context';
 
-export default function LoginPage() {
-  const dynamicContext = useContext(DynamicContext); // Access the dynamic context
+const loginSchema = Yup.object().shape({
+  username: Yup.string().required('Username is required'),
+  password: Yup.string().required('Password is required'),
+});
+
+export const Login = () => {
+  const [error, setError] = useState('');
+
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async (values) => {
     try {
-      // Send a POST request to create a booking
-      const response = await axios.post("/bookings", values);
-      console.log(response.data);
+      const response = await fetch('/sessions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
 
-      // Send a GET request to retrieve services
-      const servicesResponse = await axios.get("/services");
-      console.log(servicesResponse.data);
+      const data = await response.json();
 
-      // Send a POST request to create a customer service
-      await axios.post("/customer_services", values);
-
-      // Send a GET request to retrieve a specific service
-      const serviceId = 123; // Replace with the actual ID
-      const serviceResponse = await axios.get(`/services/${serviceId}`);
-      console.log(serviceResponse.data);
-
-      // ... continue with other requests
-
+      if (data instanceof Array) {
+        setError(data[0]);
+      } else if (data.status === 'error') {
+        setError(data.message);
+      } else {
+        // success
+        login(data.user);
+      }
     } catch (error) {
-      console.error(error);
+      setError('Internal server error');
     }
   };
 
   return (
-    <DynamicContext.Provider value={dynamicContext}>
-      <div>
-        
+    <Container component="main" maxWidth="xs">
+      <Box
+        sx={{
+          marginTop: 8,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          {/* <LockOutlinedIcon /> */}
+        </Avatar>
+        <Typography component="h1" variant="h5">
+          Login
+        </Typography>
+        {error && <Alert severity="error">{error}</Alert>}
         <Formik
-          initialValues={{ email: "", password: "" }}
-          validationSchema={loginValidator}
+          initialValues={{
+            username: '',
+            password: '',
+          }}
+          validationSchema={loginSchema}
           onSubmit={handleSubmit}
         >
-          {({ errors, touched }) => (
-            <Form>
-              <FormControl>
-                <FormLabel htmlFor="email">Email</FormLabel>
-                <Field name="email" type="email" as={Input} />
-                {errors.email && touched.email ? (
-                  <div>{errors.email}</div>
-                ) : null}
-              </FormControl>
+          <Form noValidate>
+            <Field
+              as={TextField}
+              margin="normal"
+              required
+              fullWidth
+              id="username"
+              label="Username"
+              name="username"
+              error={
+                formik.touched.username &&
+                Boolean(formik.errors.username)
+              }
+              helperText={
+                formik.touched.username &&
+                formik.errors.username
+              }
+            />
+            <Field
+              as={TextField}
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              error={
+                formik.touched.password &&
+                Boolean(formik.errors.password)
+              }
+              helperText={
+                formik.touched.password &&
+                formik.errors.password
+              }
+            />
 
-              <FormControl>
-                <FormLabel htmlFor="password">Password</FormLabel>
-                <Field name="password" type="password" as={Input} />
-                {errors.password && touched.password ? (
-                  <div>{errors.password}</div>
-                ) : null}
-              </FormControl>
-
-              <Button colorScheme="blue" type="submit">
-                Submit
-              </Button>
-            </Form>
-          )}
+            <LoadingButton
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              loading={formik.isSubmitting}
+            >
+              Login
+            </LoadingButton>
+            <Grid container>
+              <Grid item>
+                <MuiLink
+                  to="/signup"
+                  variant="body2"
+                  component={Link}
+                >
+                  {"Don't have an account? Sign Up"}
+                </MuiLink>
+              </Grid>
+            </Grid>
+          </Form>
         </Formik>
-      </div>
-    </DynamicContext.Provider>
+      </Box>
+    </Container>
   );
-}
+};
