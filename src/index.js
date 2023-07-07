@@ -7,19 +7,18 @@ import { ChakraBaseProvider } from '@chakra-ui/react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter } from 'react-router-dom';
 
-const defaultTheme = createTheme()
 
+const defaultTheme = createTheme();
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-  <ChakraBaseProvider>
-    <ThemeProvider theme={defaultTheme}>
-      <BrowserRouter>
+    <ChakraBaseProvider>
+      <ThemeProvider theme={defaultTheme}>
+        <BrowserRouter>
           <App />
-      </BrowserRouter>
-    </ThemeProvider>
-  </ChakraBaseProvider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </ChakraBaseProvider>
   </React.StrictMode>
 );
 
@@ -32,3 +31,4 @@ export * from './components/Auth/Register';
 export * from './components/Auth/Login';
 export * from './components/Auth/Profile';
 export * from './components/Layout'
+
