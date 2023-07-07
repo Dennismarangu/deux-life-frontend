@@ -106,6 +106,51 @@ const handleLogout = async () => {
   }
 };
 
+return (
+  <div>
+    {authentication ? (
+      <div>
+        <h1>Profile</h1>
+        <Formik
+          initialValues={customerProfile}
+          validationSchema={validationSchema}
+          onSubmit={handleUpdateAccount}
+        >
+          <Form>
+            <div>
+              <label htmlFor="name">Name</label>
+              <Field type="text" id="name" name="name" as={Input} />
+              <ErrorMessage name="name" component="div" />
+            </div>
+
+            <div>
+              <label htmlFor="email">Email</label>
+              <Field type="email" id="email" name="email" as={Input} />
+              <ErrorMessage name="email" component="div" />
+            </div>
+
+            {/* Add more fields from the customer profile here */}
+
+            <Button colorScheme="blue" type="submit">
+              Update Account
+            </Button>
+            <Button colorScheme="red" onClick={handleDeleteAccount}>
+              Delete Account
+            </Button>
+            <Button onClick={handleLogout}>Logout</Button>
+          </Form>
+        </Formik>
+      </div>
+    ) : (
+      <div>
+        <p>Please log in to view your profile.</p>
+        {/* Render a login form or redirect to the login page */}
+      </div>
+    )}
+  </div>
+);
+
+
 
 
 
