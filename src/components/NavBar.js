@@ -9,7 +9,7 @@ export function NavBar() {
       <Box
       as="div"
       display="flex"
-      flexDirection="column"
+      flexDirection="row"
       padding="20px"
       fontWeight="bold"
       textColor="black"
@@ -21,8 +21,8 @@ export function NavBar() {
       >
         <Flex align="center" _hover={{ color: 'black'}}>
           <ArrowRightIcon boxSize={4} mr={2} />
-            <Button backgroundColor="transparent" variant='solid' margin="5px" size="sm" fontWeight="bold" color="black" padding="10px" borderRadius="10px" _hover={{ color: 'rgb(255,215,0)'}} fontSize="xl">
-              Book a room with us today!
+            <Button backgroundColor="transparent" variant='solid' margin="5px" size="sm" fontWeight="bold" color="black" padding="10px" borderRadius="10px" _hover={{ color: 'brown'}} fontSize="xl">
+              Bookings
             </Button>
         </Flex>
       </NavLink>
@@ -33,8 +33,8 @@ export function NavBar() {
       >
         <Flex align="center">
           <ArrowRightIcon boxSize={4} mr={2} />
-            <Button backgroundColor="transparent" variant='solid' margin="5px" size="sm" fontWeight="bold" color="black" padding="10px" borderRadius="10px" _hover={{ color: 'rgb(255,255,0)'}} fontSize="xl">
-              Request one of our exclusive services today!
+            <Button backgroundColor="transparent" variant='solid' margin="5px" size="sm" fontWeight="bold" color="black" padding="10px" borderRadius="10px" _hover={{ color: 'brown'}} fontSize="xl">
+              Services
             </Button>
         </Flex>
       </NavLink>
