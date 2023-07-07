@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box, Heading, Container, VStack } from '@chakra-ui/react';
 import BookingForm from './components/BookingForm';
 
+import Service from './components/Service';
+import ServiceContextProvider from './context/ServiceContext';
+
 function App() {
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState(null);
@@ -20,6 +23,10 @@ function App() {
 
   return (
     <ChakraProvider>
+          <ServiceContextProvider>
+             <Service />
+          </ServiceContextProvider>
+    
       <Box bg="gray.100" minH="100vh" py={8}>
         <Container maxW="xl">
           <VStack spacing={6}>
