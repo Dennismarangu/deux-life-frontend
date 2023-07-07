@@ -26,7 +26,7 @@ const Profile = () => {
 
     fetchCustomerProfile();
   }, []);
-  
+
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -37,7 +37,6 @@ const Profile = () => {
   });
 
   const handleUpdateAccount = async (values) => {
-    const customerId = "123"; // Replace "123" with the actual customer ID
 
     try {
       const response = await fetch(`http://127.0.0.1:3000/customers/${customerId}`, {
@@ -62,17 +61,16 @@ const Profile = () => {
     }
   };
 
-  const handleDeleteAccount = async () => {
-    const customerId = "123"; // Replace "123" with the actual customer ID
-
+     const handleDeleteAccount = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:3000/customers/${customerId}`, {
+      const response = await fetch("http://127.0.0.1:3000/api/customers/:customerId", {
         method: "DELETE", // Use the appropriate HTTP method for deleting the customer's account
       });
 
       if (response.ok) {
         console.log("Account deleted successfully");
-        // Optionally, you can perform additional actions after deleting the account
+        setAuthentication(false); // Update the authentication state to false
+        setCustomerProfile({}); // Clear the customer profile data
       } else {
         const errorData = await response.json();
         console.error("Failed to delete account:", errorData);
@@ -94,6 +92,7 @@ const Profile = () => {
         console.log("Logout successful");
         setAuthentication(false); // Update the authentication state to false
         // Optionally, you can perform additional actions after logging out
+        setCustomerProfile({}); //clear the customer profile data
       } else {
         const errorData = await response.json();
         console.error("Failed to logout:", errorData);
@@ -101,6 +100,32 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("An error occurred while logging out:", error);
+      // Handle the error condition
+    }
+  };
+
+       const handleCreateAccount = async (values) => {
+    try {
+      const response = await fetch("http://127.0.0.1:3000/api/customers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        const customerData = await response.json();
+        console.log("Account created successfully");
+        setAuthentication(true); // Update the authentication state to true
+        setCustomerProfile(customerData); // Set the customer profile data
+      } else {
+         const errorData = await response.json();
+        console.error("Failed to create account:", errorData);
+        // Display an error message or handle the error accordingly
+      }
+    } catch (error) {
+      console.error("An error occurred while creating account:", error);
       // Handle the error condition
     }
   };
