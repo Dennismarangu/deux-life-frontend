@@ -23,10 +23,10 @@ function App() {
 
   return (
     <ChakraProvider>
-          <ServiceContextProvider>
-             <Service />
-          </ServiceContextProvider>
-    
+      <ServiceContextProvider>
+        <Service />
+      </ServiceContextProvider>
+
       <Box bg="gray.100" minH="100vh" py={8}>
         <Container maxW="xl">
           <VStack spacing={6}>
