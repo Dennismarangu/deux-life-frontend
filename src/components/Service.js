@@ -1,8 +1,25 @@
 import React, { useContext, useState } from 'react';
 import { ServiceContext } from '../context/ServiceContext';
-import './Service.css';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import {
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  Heading,
+  Image,
+  Input,
+  Text,
+  Center,
+  Spinner,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+} from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const Service = () => {
   const { services } = useContext(ServiceContext);
@@ -26,9 +43,6 @@ const Service = () => {
     setShowPopup(true);
   };
 
-  const handleSortByCost = (value) => {
-    setSortBy(value);
-  };
 
   const handleConfirmService = () => {
     setLoading(true);
@@ -88,25 +102,34 @@ const Service = () => {
       return categories
         .filter((category) => category.startsWith(mainCategory))
         .map((category) => (
-          <button
+          <Button
             key={category}
             onClick={() => handleCategoryClick(category)}
-            className={`subcategory ${category === selectedCategory ? 'active' : ''}`}
+            variant={category === selectedCategory ? 'solid' : 'outline'}
+            fontSize="xl"
           >
             {category.split(' - ')[1]}
-          </button>
+          </Button>
         ));
     }
     return null;
   };
+
+  const handleSortByCost = (value) => {
+    setSortBy(value);
+  };
+
 
   const renderServices = () => {
     if (selectedCategory === '') {
       return null;
     }
 
+
     const filteredServices = services.filter(
-      (service) => service.service_name.split(' - ')[0] === selectedCategory
+      (service) =>
+        service.service_name.toLowerCase().includes(searchQuery.toLowerCase()) &&
+        service.service_name.startsWith(selectedCategory)
     );
 
     // Apply sorting based on the sortBy value
@@ -122,14 +145,26 @@ const Service = () => {
       const lastTwoNames = hierarchy.slice(-2);
 
       return (
-        <div key={service.id} className="data-item">
-          <img src={service.image_url} alt={service.service_name} />
-          <h3>{lastTwoNames.join(' - ')}</h3>
-          <p>{service.service_description}</p>
-          <p>Cost: {service.service_cost}</p>
-          <p>Head of Service: {service.head_of_service}</p>
-          <button onClick={() => handleServiceClick(service)}>Hire Service</button>
-        </div>
+        <GridItem key={service.id} className="data-item" boxShadow="md" borderRadius="md" p={4}>
+          <Box>
+            <Image src={service.image_url} alt={service.service_name} boxSize="100%" objectFit="cover" h={200} />
+            <Heading fontSize="md" mt={2} noOfLines={2}>
+              {lastTwoNames.join(' - ')}
+            </Heading>
+            <Text fontSize="sm" mt={2} noOfLines={4}>
+              {service.service_description}
+            </Text>
+            <Text fontSize="sm" mt={2}>
+              Cost: {service.service_cost}
+            </Text>
+            <Text fontSize="sm" mt={2}>
+              Head of Service: {service.head_of_service}
+            </Text>
+          </Box>
+          <Button onClick={() => handleServiceClick(service)} colorScheme="teal" mt={4}>
+            Hire Service
+          </Button>
+        </GridItem>
       );
     });
   };
@@ -139,95 +174,123 @@ const Service = () => {
   };
 
   return (
-    <div className="service-container">
-      <div className="top-section">
-        <h3>Services</h3>
-        <div className="search-container">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search..."
-          />
-          <button className="search-icon" onClick={handleSearch}>
-            <FontAwesomeIcon icon={faSearch} />
-          </button>
-        </div>
-      </div>
-      <div className="main-links">
-        <button
-          onClick={() => handleMainLinkClick('Food Menu')}
-          className={`main-link ${selectedCategory === 'Food Menu' ? 'active' : ''}`}
-        >
-          Food Menu
-        </button>
-        {renderSubcategories('Food Menu')}
-        <button
-          onClick={() => handleMainLinkClick('Transport')}
-          className={`main-link ${selectedCategory === 'Transport' ? 'active' : ''}`}
-        >
-          Transport
-        </button>
-        {renderSubcategories('Transport')}
-        <button
-          onClick={() => handleMainLinkClick('Cinema')}
-          className={`main-link ${selectedCategory === 'Cinema' ? 'active' : ''}`}
-        >
-          Cinemax Theater
-        </button>
-        {renderSubcategories('Cinema')}
-        <button
-          onClick={() => handleMainLinkClick('Recreational Amenities')}
-          className={`main-link ${selectedCategory === 'Recreational Amenities' ? 'active' : ''}`}
-        >
-          Recreational Amenities
-        </button>
-        {renderSubcategories('Recreational Amenities')}
-      </div>
-      <div className="sort-dropdown">
-        <button className="sort-button">Sort by Cost</button>
-        <div className="sort-options">
-          <button onClick={() => handleSortByCost('lowest')}>Lowest to Highest</button>
-          <button onClick={() => handleSortByCost('highest')}>Highest to Lowest</button>
-        </div>
-      </div>
-      <div className="data-container">{renderServices()}</div>
+    <Box className="service-container" p={10} bgGradient="linear(to right, rgba(255,255,255,0.6), rgba(255,255,255,0.5))" bgSize="cover" bgImage="url('../img/hotel-interior.jpg')">
+    <Box display="flex" justifyContent="space-between" alignItems="center" mb={4} flexWrap="wrap">
+    <Heading as="h3" fontSize="4xl" fontFamily="Lobster" whiteSpace="nowrap" ml={100}>
+      Services
+</Heading>
+  <Box display="flex" alignItems="center">
+    <Input
+      type="text"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      placeholder="Search..."
+      mr={2}
+      borderRadius="md"
+    />
+    <Button colorScheme="teal" onClick={handleSearch}>
+      <FontAwesomeIcon icon={faSearch} />
+    </Button>
+  </Box>
+</Box>
+      <Grid templateColumns="repeat(auto-fit, minmax(200px, 1fr))" gap={6} justifyItems="center">
+      {categories.map((category) => (
+      <React.Fragment key={category}>
+       <Button
+      onClick={() => handleMainLinkClick(category)}
+      variant={selectedCategory === category ? 'solid' : 'outline'}
+      fontSize="xl"
+       >
+       {category}
+    </Button>
+       {renderSubcategories(category)}
+      </React.Fragment>
+   ))}
+      </Grid>
+      <Box mt={6} display="grid" gridTemplateColumns="repeat(3, 1fr)" gridGap={6} justifyContent="center">
+  <Box position="relative">
+    <Button colorScheme="teal" className="sort-button">
+      Sort by Cost
+    </Button>
+    <Box
+      position="relative"
+      display={sortBy ? 'block' : 'none'}
+      backgroundColor="#f9f9f9"
+      minWidth="160px"
+      boxShadow="md"
+      zIndex="1"
+      padding="10px"
+      borderRadius="md"
+      mt={2}
+    >
+  <Button
+    onClick={() => handleSortByCost('lowest')}
+    variant={sortBy === 'lowest' ? 'solid' : 'ghost'}
+    mb={2}
+    w="100%"
+  >
+    Lowest to Highest
+  </Button>
+  <Button
+    onClick={() => handleSortByCost('highest')}
+    variant={sortBy === 'highest' ? 'solid' : 'ghost'}
+    w="100%"
+  >
+    Highest to Lowest
+  </Button>
+    </Box>
+  </Box>
+</Box>
+      <Grid className="data-container" templateColumns="repeat(3, 1fr)" gap={6} justifyItems="center">
+        {renderServices()}
+      </Grid>
       {showPopup && selectedService && (
-        <div className="popup-container">
-          <div className="popup-wrapper">
-            <div className="popup-image">
-              <img src={selectedService.image_url}alt={selectedService.service_name} />
-            </div>
-            <div className="popup-text">
-              <h1 className="popup-title">{selectedService.service_name}</h1>
-              <div className="popup-price">{selectedService.service_cost}</div>
-              <p className="popup-description">{selectedService.service_description}</p>
+        <AlertDialog isOpen={showPopup} onClose={() => setShowPopup(false)}>
+          <AlertDialogOverlay />
+          <AlertDialogContent>
+            <AlertDialogHeader>Confirm Service</AlertDialogHeader>
+            <AlertDialogBody>
+              <Image src={selectedService.image_url} alt={selectedService.service_name} boxSize="100%" objectFit="contain" mb={4} />
+              <Heading as="h1" fontSize="xl" mb={2}>
+                {selectedService.service_name}
+              </Heading>
+              <Text fontSize="lg" fontWeight="bold" mb={2}>
+                {selectedService.service_cost}
+              </Text>
+              <Text fontSize="md" mb={4}>
+                {selectedService.service_description}
+              </Text>
               {!loading ? (
-                <button onClick={handleConfirmService} className="popup-button">
+                <Button colorScheme="teal" onClick={handleConfirmService}>
                   Confirm Service
-                </button>
+                </Button>
               ) : (
-                <div>Loading...</div>
+                <Center mt={4}>
+                  <Spinner color="teal" size="lg" />
+                </Center>
               )}
-            </div>
-            <button className="popup-close-button" onClick={() => setShowPopup(false)}>
-              X
-            </button>
-          </div>
-        </div>
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button onClick={() => setShowPopup(false)}>Close</Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
       {confirmedService && (
-        <div className="popup-container">
-          <div className="popup-wrapper">
-            <h1 className="popup-title">Service Booked</h1>
-            <p className="popup-description">Your service has been successfully booked!</p>
-            <button className="popup-button" onClick={() => setConfirmedService(null)}>
-              Close
-            </button>
-          </div>
-        </div>
+        <AlertDialog isOpen={Boolean(confirmedService)} onClose={() => setConfirmedService(null)}>
+          <AlertDialogOverlay />
+          <AlertDialogContent>
+            <AlertDialogHeader>Service Booked</AlertDialogHeader>
+            <AlertDialogBody>Your service has been successfully booked!</AlertDialogBody>
+            <AlertDialogFooter>
+              <Button colorScheme="teal" onClick={() => setConfirmedService(null)}>
+                Close
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       )}
-    </div>
+    </Box>
   );
 };
 

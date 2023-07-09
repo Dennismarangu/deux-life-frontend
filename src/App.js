@@ -30,6 +30,12 @@ function App() {
   }, []);
 
   return (
+    <ChakraProvider>
+      <ServiceContextProvider>
+        <Service />
+      </ServiceContextProvider>
+
+      <Box bg="gray.100" minH="100vh" py={8}>
     <>
       <Routes>
        	<Route path="/" element={<Layout>Home</Layout>} />
