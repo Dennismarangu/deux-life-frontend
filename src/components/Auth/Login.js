@@ -1,15 +1,22 @@
 import React, { useState, useContext } from 'react';
-import { Box, Container, Grid, Link as ChakraLink, Avatar, Text, Alert, Button } from '@chakra-ui/react';
-import { Formik, Form, Field } from 'formik';
-import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
-import AuthContext from '../context/AuthContext';
 import {
+  Box,
+  Container,
+  Grid,
+  Link as ChakraLink,
+  Avatar,
+  Text,
+  Alert,
+  Button,
   FormControl,
   FormLabel,
   Input,
   FormErrorMessage,
 } from '@chakra-ui/react';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+import { Link } from 'react-router-dom';
+import AuthContext from '../context/AuthContext';
 
 const loginSchema = Yup.object().shape({
   username: Yup.string().required('Username is required'),
@@ -121,3 +128,5 @@ export const Login = () => {
     </Container>
   );
 };
+
+export default Login;

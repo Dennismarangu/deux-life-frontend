@@ -3,9 +3,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { Button, FormControl, FormLabel, Input, FormErrorMessage } from "@chakra-ui/react";
 
-const Profile = () => {
+const Profile = ({ authentication }) => {
   const [customerProfile, setCustomerProfile] = useState({});
-  const [authentication, setAuthentication] = useState(true);
 
   useEffect(() => {
     const fetchCustomerProfile = async () => {
@@ -14,7 +13,6 @@ const Profile = () => {
         if (response.ok) {
           const profileData = await response.json();
           setCustomerProfile(profileData);
-          setAuthentication(true); // Update the authentication state to true
         } else {
           const errorData = await response.json();
           console.error("Failed to fetch customer profile:", errorData);
@@ -74,31 +72,17 @@ const Profile = () => {
     >
       <Form>
         {/* Form fields */}
-        <Formik
-  initialValues={{
-    name: customerProfile?.name || "",
-    email: customerProfile?.email || "",
-    password: "",
-    password_confirmation: "",
-  }}
-  validationSchema={validationSchema}
-  onSubmit={handleUpdateAccount}
->
-  <Form>
-    <Field name="name">
-      {({ field, form }) => (
-        <FormControl isInvalid={form.errors.name && form.touched.name}>
-          <FormLabel htmlFor="name">Name</FormLabel>
-          <Input {...field} id="name" placeholder="Name" />
-          <FormErrorMessage>{form.errors.name}</FormErrorMessage>
-        </FormControl>
-      )}
-    </Field>
-    {/* Add other fields using the same pattern */}
-    <Button type="submit">Update Account</Button>
-  </Form>
-</Formik>
-
+        <Field name="name">
+          {({ field, form }) => (
+            <FormControl isInvalid={form.errors.name && form.touched.name}>
+              <FormLabel htmlFor="name">Name</FormLabel>
+              <Input {...field} id="name" placeholder="Name" />
+              <FormErrorMessage>{form.errors.name}</FormErrorMessage>
+            </FormControl>
+          )}
+        </Field>
+        {/* Add other fields using the same pattern */}
+        <Button type="submit">Update Account</Button>
       </Form>
     </Formik>
   );

@@ -4,6 +4,7 @@ export const ServiceContext = createContext();
 
 const ServiceContextProvider = (props) => {
   const [services, setServices] = useState([]);
+  const [login, setLogin] = useState(null);
 
   useEffect(() => {
     fetchServices();
@@ -16,8 +17,15 @@ const ServiceContextProvider = (props) => {
       .catch(error => console.error('Error fetching services:', error));
   };
 
+  const handleLogin = (username, password) => {
+    // Perform the login logic here and set the login state accordingly
+    // ...
+
+    setLogin({ username, password });
+  };
+
   return (
-    <ServiceContext.Provider value={{ services, fetchServices }}>
+    <ServiceContext.Provider value={{ services, fetchServices, login, handleLogin }}>
       {props.children}
     </ServiceContext.Provider>
   );

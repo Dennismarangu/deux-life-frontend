@@ -19,10 +19,7 @@ const BookingForm = ({ room, onBookingSubmit }) => {
   });
 
   const handleSubmit = (values, { setSubmitting }) => {
-    // Pass the form values to the parent component for handling the booking submission
     onBookingSubmit(values);
-
-    // Reset the form
     setSubmitting(false);
   };
 
@@ -31,48 +28,37 @@ const BookingForm = ({ room, onBookingSubmit }) => {
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {formik => (
           <Form>
-            <FormControl isInvalid={formik.errors.user_name && formik.touched.user_name}>
-              <FormLabel htmlFor="user_name">User Name</FormLabel>
-              <Input
-                type="text"
-                id="user_name"
-                name="user_name"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.user_name}
-              />
-              <FormErrorMessage>{formik.errors.user_name}</FormErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={formik.errors.check_in_date && formik.touched.check_in_date}>
-              <FormLabel htmlFor="check_in_date">Check-in Date</FormLabel>
-              <Input
-                type="date"
-                id="check_in_date"
-                name="check_in_date"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.check_in_date}
-              />
-              <FormErrorMessage>{formik.errors.check_in_date}</FormErrorMessage>
-            </FormControl>
-
-            <FormControl isInvalid={formik.errors.check_out_date && formik.touched.check_out_date}>
-              <FormLabel htmlFor="check_out_date">Check-out Date</FormLabel>
-              <Input
-                type="date"
-                id="check_out_date"
-                name="check_out_date"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.check_out_date}
-              />
-              <FormErrorMessage>{formik.errors.check_out_date}</FormErrorMessage>
-            </FormControl>
-
+            <Field name="user_name">
+              {({ field, form }) => (
+                <FormControl isInvalid={form.errors.user_name && form.touched.user_name}>
+                  <FormLabel htmlFor="user_name">User Name</FormLabel>
+                  <Input {...field} id="user_name" placeholder="User Name" />
+                  <FormErrorMessage>{form.errors.user_name}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="check_in_date">
+              {({ field, form }) => (
+                <FormControl isInvalid={form.errors.check_in_date && form.touched.check_in_date}>
+                  <FormLabel htmlFor="check_in_date">Check-in Date</FormLabel>
+                  <Input {...field} type="date" id="check_in_date" placeholder="Check-in Date" />
+                  <FormErrorMessage>{form.errors.check_in_date}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
+            <Field name="check_out_date">
+              {({ field, form }) => (
+                <FormControl isInvalid={form.errors.check_out_date && form.touched.check_out_date}>
+                  <FormLabel htmlFor="check_out_date">Check-out Date</FormLabel>
+                  <Input {...field} type="date" id="check_out_date" placeholder="Check-out Date" />
+                  <FormErrorMessage>{form.errors.check_out_date}</FormErrorMessage>
+                </FormControl>
+              )}
+            </Field>
             <Button mt={4} colorScheme="teal" isLoading={formik.isSubmitting} type="submit">
               Book Now
             </Button>
+            <ErrorMessage name="user_name" component="div" />
           </Form>
         )}
       </Formik>
