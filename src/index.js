@@ -1,24 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { ChakraBaseProvider } from '@chakra-ui/react';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter } from 'react-router-dom';
-
-
-const defaultTheme = createTheme();
+import { ChakraProvider } from '@chakra-ui/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <ChakraBaseProvider>
-      <ThemeProvider theme={defaultTheme}>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </ThemeProvider>
-    </ChakraBaseProvider>
+    <ChakraProvider>
+      <App />
+    </ChakraProvider>
   </React.StrictMode>
 );
 
@@ -31,4 +21,3 @@ export * from './components/Auth/Register';
 export * from './components/Auth/Login';
 export * from './components/Auth/Profile';
 export * from './components/Layout'
-
