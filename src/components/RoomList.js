@@ -1,12 +1,45 @@
-import React, { useState } from 'react';
-import { Box, Heading, Image } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react';
+import { Box, Heading } from '@chakra-ui/react';
 import BookingForm from './BookingForm';
 
-const RoomList = ({ rooms }) => {
+const RoomList = () => {
   const [selectedRoom, setSelectedRoom] = useState(null);
+  const [rooms, setRooms] = useState([]);
+
+  useEffect(() => {
+    // Fetch room data from the backend API
+    fetch('http://localhost:3000/rooms')
+      .then(response => response.json())
+      .then(data => setRooms(data))
+      .catch(error => console.error('Error fetching room data:', error));
+  }, []);
 
   const handleRoomClick = (room) => {
     setSelectedRoom(room);
+  };
+
+  const handleBookingSubmit = (values) => {
+    // Make a POST request to the backend with the form data (values)
+    fetch('http://localhost:3000/bookings', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(values)
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response from the server (optional)
+        console.log(data); // You can customize this based on your requirements
+        // Display a visual confirmation of the successful booking
+        alert('Booking successful!');
+        // Reset the selected room
+        setSelectedRoom(null);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle errors if necessary
+      });
   };
 
   return (
@@ -25,13 +58,15 @@ const RoomList = ({ rooms }) => {
             {room.room_name}
           </Heading>
           <Box>{room.room_description}</Box>
-          <Box>Capacity: {room.room_capacity}</Box>
+          <Box>Is Booked: {room.is_booked ? 'Yes' : 'No'}</Box>
           <Box>Price: {room.room_price}</Box>
         </Box>
       ))}
-      {selectedRoom && <BookingForm room={selectedRoom} />}
+      {selectedRoom && <BookingForm room={selectedRoom} onBookingSubmit={handleBookingSubmit} />}
     </Box>
   );
 };
 
 export default RoomList;
+
+
