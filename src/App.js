@@ -1,4 +1,5 @@
-
+import React from "react";
+import Profile from "./components/Profile";
 import React, { useState, useEffect } from 'react';
 import { ChakraProvider, Box, Heading, Container, VStack } from '@chakra-ui/react';
 import BookingForm from './components/BookingForm';
@@ -64,5 +65,5 @@ function App() {
     </>
   );
 }
-
 export default App;
+
