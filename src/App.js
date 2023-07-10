@@ -7,7 +7,8 @@ import Service from './components/Service';
 import ServiceContextProvider from './context/ServiceContext';
 import RoomList from './components/RoomList';
 import MyBookings from './components/MyBookings';
-import Login from './components/Auth/Login'; // Import the Login component
+import Login from './components/Auth/Login';
+import Profile from './components/Profile';
 
 function App() {
   const [rooms, setRooms] = useState([]);
@@ -58,7 +59,8 @@ function App() {
               </Box>
             }
           />
-          <Route path="/login" element={<Login />} /> {/* Add the route for "/login" */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </Router>
     </ChakraProvider>
