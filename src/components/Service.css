@@ -1,0 +1,320 @@
+.service-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Adjust the width as needed */
+    grid-gap: 20px;
+    background-color: #f2f2f2;
+    padding: 250px;
+    overflow: auto;
+    justify-content: flex-start;
+    background: linear-gradient(
+        rgba(255, 255, 255, 0.6),
+        rgba(255, 255, 255, 0.5)
+      ),
+      url("../img/hotel-interior.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+
+
+  .service-container > * {
+    margin-left: -255px;
+  }
+
+  .top-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .top-section h3 {
+    order: 2;
+    margin: 0;
+    margin-top: -360px;
+    margin-left: 100px;
+    font-family: 'Lobster';
+    font-size: 100px;
+    white-space: nowrap
+  }
+
+
+  h3 {
+    font-size: 24px;
+    margin: 10px 0;
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    color: black;
+
+  }
+
+  .main-link {
+    text-decoration: underline;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: black;
+    font-size: 20px;
+    margin-left: auto;
+  }
+
+  .main-links {
+    list-style-type: disc;
+    padding-left: 20px;
+    margin-top: 130px;
+  }
+
+  .main-links button {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .main-link.active {
+    font-weight: bold;
+  }
+
+  .subcategory {
+    text-decoration: underline;
+    cursor: pointer;
+    border: none;
+    background: none;
+    margin-left: 1rem;
+    color: black;
+  }
+
+  .sort-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 100px;
+    height: 40px;
+  }
+
+  .sort-button {
+    background-color: #747a74;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    position: relative;
+    margin-top: 0; /* Remove the negative margin */
+    margin-left: auto; /* Adjust the left margin as needed */
+  }
+
+  .sort-options {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    padding: 10px;
+    right: 0;
+    top: 40px;
+  }
+
+  .sort-dropdown:hover .sort-options {
+    display: block;
+  }
+
+  .sort-options button {
+    background-color: transparent;
+    border: none;
+    color: black;
+    margin: 5px 0;
+    cursor: pointer;
+  }
+
+  .sort-options button:hover {
+    background-color: #f2f2f2;
+  }
+
+  .search-container {
+    position: relative;
+    margin-top: 0; /* Remove the negative margin */
+    margin-left: auto; /* Adjust the left margin as needed */
+  }
+  .search-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: black;
+  }
+
+  .search-icon i {
+    font-size: 16px;
+  }
+
+  .data-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 20px;
+    justify-items: center;
+    min-width: 720px;
+  }
+
+  @media (max-width: 960px) {
+    .data-container {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 680px) {
+    .data-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .data-container {
+      grid-template-columns: 1fr;
+    }
+  }
+
+
+  .data-item {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center the items vertically */
+    justify-content: center; /* Center the items horizontally */
+    text-align: center;
+  }
+
+  .data-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .data-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: contain;
+  }
+
+  h3 {
+    font-size: 24px;
+    margin: 10px 0;
+    max-height: 3em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    color: black;
+  }
+
+  p {
+    font-size: 12px;
+    margin: 10px 0;
+    overflow-y: auto;
+    max-height: 150px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: black;
+  }
+
+  button {
+    background-color: #747a74;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #FFDEAD;
+  }
+
+
+  .popup-container {
+    position: fixed;
+    top: -0%;
+    left: 17%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+  }
+
+  .popup-wrapper {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    text-align: center;
+  }
+
+
+  .popup-image {
+    flex-basis: 30%; /* Adjust the flex-basis value as desired */
+    margin-right: 50px;
+  }
+
+  .popup-image img {
+    width: 100%; /* Adjust the width value as desired */
+    max-height: 200px; /* Optionally, set a max-height to maintain aspect ratio */
+    object-fit: contain;
+  }
+
+  .popup-text {
+    flex-basis: 60%;
+  }
+
+  .popup-title {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+
+  .popup-price {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .popup-description {
+    font-size: 18px;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  .popup-button {
+    padding: 10px 20px;
+    background-color: #ff6a5c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .popup-button:hover {
+    background-color: #f5544d;
+  }
+
+  .popup-close-button {
+    position: absolute;
+    top: 80px;
+    right: 580px;
+    font-size: 24px;
+    color: red;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+  }
