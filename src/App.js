@@ -1,15 +1,15 @@
-import * as React from 'react'
+//
 
-// 1. import `ChakraProvider` component
-import { ChakraProvider } from '@chakra-ui/react'
+import React from "react";
+import Profile from "./components/Profile";
 
-function App() {
-  // 2. Wrap ChakraProvider at the root of your app
+function App ()  {
   return (
-    <ChakraProvider>
-    
-    </ChakraProvider>
-  )
-}
+  <div className="App">
 
+      <Profile />
+    </div>
+  );
+}
 export default App;
+
